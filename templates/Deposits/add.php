@@ -117,7 +117,7 @@
                         <?= $this->Form->control('order_number', [
                             'label' => 'Location ID',
                             'class' => 'form-control',
-                            'placeholder' => 'Example: A02211'
+                            'placeholder' => 'Example: A02211' 
                         ]) ?>
                     </div> 
 
@@ -128,7 +128,7 @@
                             'placeholder' => 'Example: DEPOSIT_KG. BATU 3_8099P'
                         ]) ?>
                     </div>
-                </div>
+                </div>  
 
                 <!-- Status -->
                 <?= $this->Form->hidden('status', ['value' => 1]) ?>

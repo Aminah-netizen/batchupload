@@ -84,21 +84,28 @@ class DepositItemsController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
-        $depositItem = $this->DepositItems->get($id, contain: []);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $depositItem = $this->DepositItems->patchEntity($depositItem, $this->request->getData());
-            if ($this->DepositItems->save($depositItem)) {
-                $this->Flash->success(__('The deposit item has been saved.'));
+    public function edit($depositId = null)
+{
+    $deposit = $this->DepositItems->Deposits->get($depositId, [
+        'contain' => ['DepositItems']
+    ]);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The deposit item could not be saved. Please, try again.'));
+    if ($this->request->is(['patch', 'post', 'put'])) {
+        $deposit = $this->DepositItems->Deposits->patchEntity($deposit, $this->request->getData(), [
+            'associated' => ['DepositItems']
+        ]);
+        if ($this->DepositItems->Deposits->save($deposit)) {
+            $this->Flash->success(__('The deposit has been updated.'));
+            return $this->redirect(['controller' => 'Deposits', 'action' => 'index']);
         }
-        $deposits = $this->DepositItems->Deposits->find('list', limit: 200)->all();
-        $this->set(compact('depositItem', 'deposits'));
+        $this->Flash->error(__('The deposit could not be updated. Please, try again.'));
     }
+
+    $costCenters = $this->DepositItems->Deposits->CostCenters->find('list');
+    $taxes = $this->DepositItems->Deposits->Taxes->find('list');
+
+    $this->set(compact('deposit', 'costCenters', 'taxes'));
+}
 
     /**
      * Delete method

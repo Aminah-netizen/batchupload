@@ -84,22 +84,28 @@ class RentalItemsController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
-    {
-        $rentalItem = $this->RentalItems->get($id, contain: []);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $rentalItem = $this->RentalItems->patchEntity($rentalItem, $this->request->getData());
-            if ($this->RentalItems->save($rentalItem)) {
-                $this->Flash->success(__('The rental item has been saved.'));
+public function edit($rentalId = null)
+{
+    $rental = $this->RentalItems->Rentals->get($rentalId, [
+        'contain' => ['RentalItems']
+    ]);
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The rental item could not be saved. Please, try again.'));
+    if ($this->request->is(['patch', 'post', 'put'])) {
+        $rental = $this->RentalItems->Rentals->patchEntity($rental, $this->request->getData(), [
+            'associated' => ['RentalItems']
+        ]);
+        if ($this->RentalItems->Rentals->save($rental)) {
+            $this->Flash->success(__('The rental has been updated.'));
+            return $this->redirect(['controller' => 'Rentals', 'action' => 'index']);
         }
-        $rentals = $this->RentalItems->Rentals->find('list', limit: 200)->all();
-        $this->set(compact('rentalItem', 'rentals'));
+        $this->Flash->error(__('The rental could not be updated. Please, try again.'));
     }
 
+    $costCenters = $this->RentalItems->Rentals->CostCenters->find('list');
+    $taxes = $this->RentalItems->Rentals->Taxes->find('list');
+
+    $this->set(compact('rental', 'costCenters', 'taxes'));
+}
     /**
      * Delete method
      *

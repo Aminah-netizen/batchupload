@@ -21,15 +21,55 @@ class RentalsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index()
-    {
-        $query = $this->Rentals->find()
-            ->contain(['CostCenters', 'Taxes']);
-        $rentals = $this->paginate($query);
+   public function index()
+{
+    $query = $this->Rentals->find()
+        ->contain(['CostCenters', 'Taxes', 'RentalItems']);
 
-        $this->set(compact('rentals'));
+    $request = $this->request->getQuery();
+
+    /* =======================
+     * Filter: Description
+     * ======================= */
+    if (!empty($request['description'])) {
+        $query->where([
+            'Deposits.description LIKE' => '%' . trim($request['description']) . '%'
+        ]);
     }
 
+    /* =======================
+     * Filter: Created Date
+     * ======================= */
+    if (!empty($request['created_date'])) {
+        $query->where(function ($exp) use ($request) {
+            return $exp->between(
+                'Rentals.created',
+                $request['created_date'] . ' 00:00:00',
+                $request['created_date'] . ' 23:59:59'
+            );
+        });
+    }
+
+    /* =======================
+     * Filter: Form Type
+     * ======================= */
+    if (!empty($request['form_type'])) {
+        if ($request['form_type'] === 'single') {
+            // Single item = no rental items
+            $query->leftJoinWith('RentalItems')
+                  ->where(['RentalItems.id IS' => null]);
+        }
+
+        if ($request['form_type'] === 'multiple') {
+            // Multiple items = has rental items
+            $query->innerJoinWith('RentalItems');
+        }
+    }
+
+    $rentals = $this->paginate($query);
+
+    $this->set(compact('rentals'));
+}
     /**
      * View method
      *

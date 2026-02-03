@@ -16,7 +16,7 @@
                 ['controller' => 'Pages', 'action' => 'home'],
                 ['class' => 'list-group-item list-group-item-action', 'escape' => false]
             ) ?>
-             <?= $this->Html->link(
+            <?= $this->Html->link(
                 '<i class="fa-solid fa-list me-2"></i> List of Deposits',
                 ['controller' => 'Deposits', 'action' => 'index'],
                 ['class' => 'list-group-item list-group-item-action', 'escape' => false]
@@ -179,17 +179,17 @@ document.getElementById('add-item')?.addEventListener('click', function () {
     row.classList.add('item-row');
 
     row.innerHTML = `
-        <td><input class="form-control" name="rental_items[${index}][reference]" required></td>
-        <td><input class="form-control" name="rental_items[${index}][doc_text]" required></td>
-        <td><input class="form-control" type="number" step="0.01" name="rental_items[${index}][amount]" required></td>
-        <td><input class="form-control" name="rental_items[${index}][order_number]"></td>
-        <td><input class="form-control" name="rental_items[${index}][description]" required></td>
+        <td><input class="form-control" name="deposit_items[${index}][reference]" required></td>
+        <td><input class="form-control" name="deposit_items[${index}][doc_text]" required></td>
+        <td><input class="form-control" type="number" step="0.01" name="deposit_items[${index}][amount]" required></td>
+        <td><input class="form-control" name="deposit_items[${index}][order_number]"></td>
+        <td><input class="form-control" name="deposit_items[${index}][description]" required></td>
         <td class="text-center">
             <button type="button" class="btn btn-sm btn-danger remove-item">✕</button>
         </td>
 
-        <input type="hidden" name="rental_items[${index}][line_no]" value="41">
-        <input type="hidden" name="rental_items[${index}][status]" value="1">
+        <input type="hidden" name="deposit_items[${index}][line_no]" value="41">
+        <input type="hidden" name="deposit_items[${index}][status]" value="1">
     `;
 
     tbody.appendChild(row);

@@ -80,7 +80,7 @@
                 90deg,
                 #93c5fd 0%,   /* soft blue (left) */
                 #60a5fa 40%,  /* medium blue */
-                #2563eb 100%  /* dark blue (right) */
+                #F9DC00 100%  /* dark blue (right) */
             );
         padding: 12px 24px;
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);

@@ -21,15 +21,55 @@ class DepositsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-    public function index()
-    {
-        $query = $this->Deposits->find()
-            ->contain(['CostCenters', 'Taxes']);
-        $deposits = $this->paginate($query);
+   public function index()
+{
+    $query = $this->Deposits->find()
+        ->contain(['CostCenters', 'Taxes', 'DepositItems']);
 
-        $this->set(compact('deposits'));
+    $request = $this->request->getQuery();
+
+    /* =======================
+     * Filter: Description
+     * ======================= */
+    if (!empty($request['description'])) {
+        $query->where([
+            'Deposits.description LIKE' => '%' . trim($request['description']) . '%'
+        ]);
     }
 
+    /* =======================
+     * Filter: Created Date
+     * ======================= */
+    if (!empty($request['created_date'])) {
+        $query->where(function ($exp) use ($request) {
+            return $exp->between(
+                'Deposits.created',
+                $request['created_date'] . ' 00:00:00',
+                $request['created_date'] . ' 23:59:59'
+            );
+        });
+    }
+
+    /* =======================
+     * Filter: Form Type
+     * ======================= */
+    if (!empty($request['form_type'])) {
+        if ($request['form_type'] === 'single') {
+            // Single item = no deposit items
+            $query->leftJoinWith('DepositItems')
+                  ->where(['DepositItems.id IS' => null]);
+        }
+
+        if ($request['form_type'] === 'multiple') {
+            // Multiple items = has deposit items
+            $query->innerJoinWith('DepositItems');
+        }
+    }
+
+    $deposits = $this->paginate($query);
+
+    $this->set(compact('deposits'));
+}
     /**
      * View method
      *
@@ -287,11 +327,14 @@ public function sendEmail($id = null)
         return $this->redirect(['action' => 'index']);
     }
 
-    $deposit = $this->Deposits->get($id);
+    $deposit = $this->Deposits->get($id, [
+        'contain' => ['DepositItems', 'CostCenters']
+    ]);
 
     $recipient = '';
     $subject = '' . $deposit->description;
     $body = "Assalammualaikum,\n\nSeek your help to process BU above.\n\n[FO PIC] appreciate your assistant to create FO starting [mm/yy]. I already update the information in planner. \n\nThanks.";
+
 
     $mailto = 'mailto:' . $recipient
               . '?subject=' . rawurlencode($subject)
