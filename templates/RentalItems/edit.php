@@ -157,7 +157,7 @@
 
                 <!-- SUBMIT -->
                 <div class="d-flex justify-content-end mt-4">
-                    <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary px-4']) ?>
+                    <?= $this->Form->button(__('Update'), ['class' => 'btn btn-primary px-4']) ?>
                 </div>
 
                 <?= $this->Form->end() ?>

@@ -33,7 +33,7 @@ class RentalsController extends AppController
      * ======================= */
     if (!empty($request['description'])) {
         $query->where([
-            'Deposits.description LIKE' => '%' . trim($request['description']) . '%'
+            'Rentals.description LIKE' => '%' . trim($request['description']) . '%'
         ]);
     }
 

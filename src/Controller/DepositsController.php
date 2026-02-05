@@ -217,7 +217,7 @@ private function exportByType(int $id, string $glAccount, string $prefix)
      * ====================== */
 
     // SPLIT ITEMS
-    if (!empty($items)) {
+    if (count($items) > 1) {
 
         foreach ($items as $item) {
             foreach ($glAccounts as $gl) {

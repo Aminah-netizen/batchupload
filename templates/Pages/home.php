@@ -1,4 +1,4 @@
-<h2 class="page-title">CNSB BATCH UPLOAD MANAGEMENT SYSTEM</h2>
+<h2 class="page-title">CNSB DEPOSIT & RENTAL BATCH UPLOAD MANAGEMENT SYSTEM</h2>
 
 <div class="container text-center batch-container">
     <div class="row justify-content-center">
@@ -49,17 +49,12 @@
             </div>
         </div>
 
-        <!-- Deposit + Rental -->
+        <!-- Deposit + Rental (Disabled) -->
         <div class="col-md-3">
-            <div class="flip-box">
-                <?= $this->Html->link(
-                    'Deposit + Rental',
-                    ['controller' => 'Forms', 'action' => 'addDepositRental'],
-                    ['class' => 'flip-link']
-                ) ?>
-            </div>
-        </div>
-
+        <div class="flip-box-disable">
+        <span class="flip-link disabled">
+            Deposit + Rental
+        </span>
     </div>
 </div>
 
