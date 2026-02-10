@@ -1,6 +1,6 @@
 Hi, I am Aminah! 
 
-**Do not use my work without credit
+**Please credit me if you use my work/idea ☺️
 
 ## Installation
 
